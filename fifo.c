@@ -1,43 +1,29 @@
 #include <stdio.h>
-
 int main() {
-    int n, frames;
-    printf("Enter reference string length: ");
-    scanf("%d", &n);
-    printf("Enter number of frames: ");
-    scanf("%d", &frames);
+    int n, f_cnt, pages[50], f[10], faults = 0, pos = 0;
 
-    int pages[50], f[10];
+    printf("Enter n and frame count: "); scanf("%d %d", &n, &f_cnt);
     printf("Enter pages:\n");
     for (int i = 0; i < n; i++) scanf("%d", &pages[i]);
-    for (int i = 0; i < frames; i++) f[i] = -1;
+    for (int i = 0; i < f_cnt; i++) f[i] = -1; // Initialize frames as empty
 
-    int pos = 0, faults = 0;
-
-    // Header Row
-    printf("\nPage\t");
-    for (int i = 0; i < frames; i++) printf("F%d\t", i + 1);
-    printf("Status\n");
-
+    printf("\nPage\tFrames\t\tStatus\n");
     for (int i = 0; i < n; i++) {
         int found = 0;
-        for (int j = 0; j < frames; j++) {
-            if (f[j] == pages[i]) {
-                found = 1;
-                break;
-            }
+        for (int j = 0; j < f_cnt; j++) {
+            if (f[j] == pages[i]) { found = 1; break; }
         }
 
         printf("%d\t", pages[i]);
         if (found) {
-            for (int j = 0; j < frames; j++) printf("%d\t", f[j]);
-            printf("H\n");
+            for (int j = 0; j < f_cnt; j++) printf("%d ", f[j]);
+            printf("\tH\n");
         } else {
-            f[pos] = pages[i];
-            pos = (pos + 1) % frames;
+            f[pos] = pages[i];        // Put page in current position
+            pos = (pos + 1) % f_cnt;  // Move pointer circularly (FIFO)
             faults++;
-            for (int j = 0; j < frames; j++) printf("%d\t", f[j]);
-            printf("M\n");
+            for (int j = 0; j < f_cnt; j++) printf("%d ", f[j]);
+            printf("\tM\n");
         }
     }
     printf("\nTotal Page Faults = %d\n", faults);
