@@ -30,3 +30,4 @@ int main(){
  * run cheyyande: gcc fork.c -o fork
  * ./fork
  * then next terminal pstree -p parentpid
+*/
